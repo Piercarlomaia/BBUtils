@@ -1,20 +1,38 @@
 import re
 
+
+def capitalize_segment(segment):
+    """Capitalize the first letter of a segment."""
+    if segment:
+        return segment[0].upper() + segment[1:]
+    return segment
+
+
 def capitalize_header(header):
     """
-    Capitalizes each segment of the header separated by hyphens.
+    Capitalizes each segment of the header separated by hyphens or underscores.
     Preserves suffixes after '~' if present.
     """
+    # Split header and suffix if '~' is present
     if '~' in header:
         main_header, suffix = header.split('~', 1)
+        suffix = '~' + suffix  # Reattach the '~' for later
     else:
         main_header, suffix = header, ''
 
-    # Capitalize each part separated by '-'
-    capitalized_main = '-'.join([word.capitalize() for word in main_header.split('-')])
+    # Identify separators: hyphen or underscore
+    # We'll use regex to split while keeping the separators
+    tokens = re.split(r'([-_])', main_header)
 
-    # Reattach the suffix if it exists
-    return f"{capitalized_main}~{suffix}" if suffix else capitalized_main
+    # Capitalize segments separated by hyphens or underscores
+    capitalized_tokens = [capitalize_segment(token) if i % 2 == 0 else token for i, token in enumerate(tokens)]
+
+    # Reconstruct the main header
+    capitalized_main = ''.join(capitalized_tokens)
+
+    # Combine with suffix
+    return capitalized_main + suffix
+
 
 def transform_wordlist(input_file, output_file):
     with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
@@ -23,6 +41,7 @@ def transform_wordlist(input_file, output_file):
             if header:
                 transformed = capitalize_header(header)
                 outfile.write(transformed + '\n')
+
 
 if __name__ == "__main__":
     import argparse
