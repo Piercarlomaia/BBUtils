@@ -11,3 +11,4 @@ db/admin/system.users
 db/admin/system.version
 db/local/startup_log
 jenkins/script
+*
