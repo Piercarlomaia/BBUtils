@@ -1,0 +1,13 @@
+debug/pprof/
+debug/vars
+debug/pprof/goroutine?debug=1
+debug/pprof/heap
+debug/pprof/trace
+metrics/
+stats.json
+db/config/
+db/config/system.sessions
+db/admin/system.users
+db/admin/system.version
+db/local/startup_log
+jenkins/script
